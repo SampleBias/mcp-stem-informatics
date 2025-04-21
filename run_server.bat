@@ -33,9 +33,9 @@ if not exist config.json (
 
 REM Check for transport mode
 if "%1"=="--network" (
-    REM Run in network mode
+    REM Run in network mode (using SSE transport)
     echo Starting Stemformatics MCP Server in network mode...
-    set MCP_TRANSPORT=network
+    set MCP_TRANSPORT=sse
     python server.py
 ) else (
     REM Default to stdio mode
