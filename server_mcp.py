@@ -21,11 +21,13 @@ from utils import setup_cache, validate_config
 # Load environment variables and configuration
 load_dotenv()
 
-# Setup logging
+# Setup logging to use stderr instead of stdout to avoid interfering with MCP protocol messages
+log_level = os.environ.get('LOGGING_LEVEL', 'INFO')
+numeric_level = getattr(logging, log_level.upper(), logging.INFO)
 logging.basicConfig(
-    level=logging.INFO,
+    level=numeric_level,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
+    handlers=[logging.StreamHandler(sys.stderr)]  # Use stderr instead of stdout
 )
 logger = logging.getLogger("stemformatics-mcp")
 
