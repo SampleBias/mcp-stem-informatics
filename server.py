@@ -431,14 +431,20 @@ def get_atlas_types_resource() -> Dict:
 if __name__ == "__main__":
     logger.info(f"Starting Stemformatics MCP Server with config from {CONFIG_PATH}")
     
-    # Determine transport mode - default to stdio but support network as well
+    # Determine transport mode - default to stdio but support SSE as well
     transport = os.getenv("MCP_TRANSPORT", "stdio")
+    
+    # Convert "network" to "sse" which is the valid transport name
+    if transport == "network":
+        transport = "sse"
+        host = config["server"].get("host", "0.0.0.0")
+        port = config["server"].get("port", 8080)
+        logger.info(f"Starting server on {host}:{port} using SSE transport")
     
     logger.info(f"Using transport: {transport}")
     
     try:
         # Let the MCP library handle transport configuration internally
-        # Just specify the transport type without additional parameters
         mcp.run(transport=transport)
     except Exception as e:
         logger.error(f"Error running MCP server: {e}")

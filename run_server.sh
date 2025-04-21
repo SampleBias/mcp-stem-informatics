@@ -30,9 +30,9 @@ fi
 
 # Check for transport mode
 if [ "$1" == "--network" ]; then
-    # Run in network mode
+    # Run in network mode (using SSE transport)
     echo "Starting Stemformatics MCP Server in network mode..."
-    export MCP_TRANSPORT=network
+    export MCP_TRANSPORT=sse
     python server.py
 else
     # Default to stdio mode
