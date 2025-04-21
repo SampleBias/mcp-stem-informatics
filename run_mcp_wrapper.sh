@@ -1,7 +1,6 @@
 #!/bin/bash
-cd "$(dirname "$0")"
 
-# Ensure we have the full path to the virtual environment
+# Get the directory of this script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VENV_DIR="${SCRIPT_DIR}/venv"
 
@@ -30,5 +29,15 @@ if [ ! -f "${PYTHON_BIN}" ]; then
   echo "Falling back to system Python: ${PYTHON_BIN}" >&2
 fi
 
-# Run the MCP server with all output to stderr
-exec "${PYTHON_BIN}" -u "${SCRIPT_DIR}/server_mcp.py" 2>/tmp/stemformatics-mcp.error.log 
+# Export Python path for the wrapper script
+export PYTHON_BIN
+
+# Run the wrapper script with diagnostics
+echo "Starting MCP Wrapper with Python: ${PYTHON_BIN}" >/tmp/stemformatics-mcp-startup.log
+"${PYTHON_BIN}" -V >>/tmp/stemformatics-mcp-startup.log 2>&1
+echo "Working directory: $(pwd)" >>/tmp/stemformatics-mcp-startup.log
+echo "PATH: $PATH" >>/tmp/stemformatics-mcp-startup.log
+ls -la "${SCRIPT_DIR}"/*.py >>/tmp/stemformatics-mcp-startup.log 2>&1
+
+# Run the wrapper script
+exec "${PYTHON_BIN}" -u "${SCRIPT_DIR}/mcp_wrapper.py" 2>/tmp/stemformatics-mcp-wrapper.error.log 

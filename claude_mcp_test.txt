@@ -1,0 +1,26 @@
+Testing MCP Stemformatics Functions with Claude
+
+To test the MCP Stemformatics functions with Claude, you can use the following requests:
+
+1. Search for datasets:
+   Ask Claude: "Can you search the Stemformatics database for datasets related to 'dendritic cell'? Use the MCP function to search datasets."
+
+2. Get dataset metadata:
+   Ask Claude: "Please retrieve the metadata for dataset with ID 2000 from Stemformatics using the MCP function."
+
+3. Get dataset samples:
+   Ask Claude: "Can you get the samples for dataset with ID 2000 from Stemformatics? Use the MCP function to get dataset samples."
+
+4. Get dataset expression:
+   Ask Claude: "Please retrieve gene expression data for gene ENSG00000118513 in dataset 2000 from Stemformatics using the MCP function."
+
+5. Search for samples:
+   Ask Claude: "Can you search for samples related to 'dendritic cell' in Stemformatics? Use the MCP function to search samples with a limit of 10 results."
+
+These requests should help test if the MCP integration with Stemformatics is working correctly. If there are any errors, Claude should provide information about what went wrong.
+
+Tips for making requests:
+- Be specific about which function you want Claude to use
+- Start with simple queries that return small amounts of data
+- Specify limits on result sizes when possible
+- Ask Claude to format the results nicely (e.g., as a table or list) 
