@@ -434,21 +434,19 @@ if __name__ == "__main__":
     # Determine transport mode - default to stdio but support network as well
     transport = os.getenv("MCP_TRANSPORT", "stdio")
     
-    # For network transport, use the config settings
-    if transport == "network":
-        host = config["server"].get("host", "0.0.0.0")
-        port = config["server"].get("port", 8080)
-        logger.info(f"Starting server on {host}:{port}")
-        transport_config = {"host": host, "port": port}
-    else:
-        # Stdio transport doesn't need additional config
-        transport_config = {}
-        
     logger.info(f"Using transport: {transport}")
     
     try:
         # Start the MCP server with the specified transport
-        mcp.run(transport=transport, **transport_config)
+        if transport == "network":
+            host = config["server"].get("host", "0.0.0.0")
+            port = config["server"].get("port", 8080)
+            logger.info(f"Starting server on {host}:{port}")
+            # For network transport mode, we need to use transport_config with network settings
+            mcp.run(transport="sse", sse={"host": host, "port": port})
+        else:
+            # Stdio transport doesn't need additional config
+            mcp.run(transport="stdio")
     except Exception as e:
         logger.error(f"Error running MCP server: {e}")
         sys.exit(1) 
