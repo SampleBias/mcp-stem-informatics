@@ -1,5 +1,5 @@
 #!/bin/bash
-# Simple script to run the Stemformatics MCP server
+# Script to run the Stemformatics MCP Server
 
 # Check if Python is installed
 if ! command -v python3 &> /dev/null; then
@@ -28,9 +28,18 @@ if [ ! -f "config.json" ] && [ -f "config.example.json" ]; then
     echo "Please edit config.json with your API settings."
 fi
 
-# Run the server with MCP CLI
-echo "Starting Stemformatics MCP Server..."
-python -m mcp dev server.py
+# Check for transport mode
+if [ "$1" == "--network" ]; then
+    # Run in network mode
+    echo "Starting Stemformatics MCP Server in network mode..."
+    export MCP_TRANSPORT=network
+    python server.py
+else
+    # Default to stdio mode
+    echo "Starting Stemformatics MCP Server in stdio mode..."
+    export MCP_TRANSPORT=stdio
+    python server.py
+fi
 
 # Deactivate virtual environment on exit
 deactivate 

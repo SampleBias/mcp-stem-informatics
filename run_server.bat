@@ -1,5 +1,5 @@
 @echo off
-REM Simple script to run the Stemformatics MCP server on Windows
+REM Script to run the Stemformatics MCP Server on Windows
 
 REM Check if Python is installed
 where python >nul 2>nul
@@ -31,9 +31,18 @@ if not exist config.json (
     )
 )
 
-REM Run the server with MCP CLI
-echo Starting Stemformatics MCP Server...
-python -m mcp dev server.py
+REM Check for transport mode
+if "%1"=="--network" (
+    REM Run in network mode
+    echo Starting Stemformatics MCP Server in network mode...
+    set MCP_TRANSPORT=network
+    python server.py
+) else (
+    REM Default to stdio mode
+    echo Starting Stemformatics MCP Server in stdio mode...
+    set MCP_TRANSPORT=stdio
+    python server.py
+)
 
 REM Deactivate virtual environment on exit
 deactivate 

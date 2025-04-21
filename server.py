@@ -279,7 +279,25 @@ def get_gene_resource(gene_id: str) -> Dict:
 
 if __name__ == "__main__":
     logger.info(f"Starting Stemformatics MCP Server with config from {CONFIG_PATH}")
+    
+    # Determine transport mode - default to stdio but support network as well
     transport = os.getenv("MCP_TRANSPORT", "stdio")
+    
+    # For network transport, use the config settings
+    if transport == "network":
+        host = config["server"].get("host", "0.0.0.0")
+        port = config["server"].get("port", 8080)
+        logger.info(f"Starting server on {host}:{port}")
+        transport_config = {"host": host, "port": port}
+    else:
+        # Stdio transport doesn't need additional config
+        transport_config = {}
+        
     logger.info(f"Using transport: {transport}")
     
-    mcp.run(transport=transport) 
+    try:
+        # Start the MCP server with the specified transport
+        mcp.run(transport=transport, **transport_config)
+    except Exception as e:
+        logger.error(f"Error running MCP server: {e}")
+        sys.exit(1) 

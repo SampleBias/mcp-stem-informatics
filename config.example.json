@@ -14,7 +14,9 @@
   },
   "server": {
     "name": "Stemformatics MCP Server",
-    "description": "MCP server for accessing and analyzing stem cell data",
-    "verbose": true
+    "description": "Model Context Protocol server for accessing and analyzing stem cell data via the Stemformatics API",
+    "verbose": true,
+    "host": "0.0.0.0",
+    "port": 8080
   }
 } 
