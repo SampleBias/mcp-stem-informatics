@@ -13,9 +13,9 @@ Unlike traditional API integration (which requires separate code, documentation,
 - Access dataset metadata
 - Query sample information
 - Retrieve gene expression data
-- Perform basic data analysis
-- Differential expression analysis
-- Pathway enrichment analysis
+- Perform t-tests and data analysis
+- Search datasets and samples
+- Access cell atlases and projections
 
 ## Setup
 
@@ -38,7 +38,11 @@ cp config.example.json config.json
 
 4. Run the server
 ```bash
+# For stdio mode (default)
 python server.py
+
+# For network mode
+./run_server.sh --network  # On Windows: run_server.bat --network
 ```
 
 ## Connecting to Claude and Cursor
@@ -85,14 +89,49 @@ The server supports optional authentication with the Stemformatics API. To enabl
 
 ## Available Tools
 
-This MCP server provides the following tools:
+This MCP server provides the following tools that match the Stemformatics API:
 
-- `list_datasets`: Get a list of available datasets
+### Dataset Operations
 - `get_dataset_metadata`: Get metadata for a specific dataset
-- `get_sample_metadata`: Get metadata for all samples in a dataset
-- `get_gene_expression`: Get gene expression data for specific genes
-- `search_genes`: Search for genes by name, symbol or description
-- `differential_expression`: Compare expression between two groups
-- `get_pathway_analysis`: Analyze pathway enrichment
-- `get_dataset_statistics`: Get statistical summary of a dataset
-- `find_similar_samples`: Find samples similar to a reference
+- `get_dataset_samples`: Get samples for a specific dataset
+- `get_dataset_expression`: Get gene expression data for a dataset
+- `get_dataset_pca`: Get PCA data for a dataset
+- `get_correlated_genes`: Get genes correlated with a specific gene
+- `perform_ttest`: Perform t-test for a gene between two sample groups
+
+### Search and Values
+- `search_datasets`: Search for datasets
+- `search_samples`: Search for samples
+- `get_dataset_values`: Get unique values for a dataset field
+- `get_sample_values`: Get unique values for a sample field
+
+### Atlas and Gene Operations
+- `get_atlas_types`: Get available atlas types
+- `get_atlas`: Get atlas data
+- `get_atlas_projection`: Get atlas projection data
+- `get_sample_group_to_genes`: Get genes associated with a sample group
+- `get_gene_to_sample_groups`: Get sample groups associated with a gene
+
+## Example Usage
+
+Here's an example of how to use the Stemformatics API directly:
+
+```python
+# Python example
+import pandas, requests
+r = requests.get('https://api.stemformatics.org/datasets/2000/samples')
+df = pandas.DataFrame(r.json())
+print(df.head())
+
+# Search for samples
+r = requests.get('https://api.stemformatics.org/search/samples?query_string=%s&field=tissue_of_origin,dataset_id' % 'dendritic cell')
+print(r.json()[:2])
+
+# Get expression matrix as file and read into pandas
+import io
+r = requests.get('https://api.stemformatics.org/datasets/6756/expression?as_file=true')
+df = pandas.read_csv(io.StringIO(r.text), sep='\t', index_col=0)
+print(df.head())
+```
+
+With this MCP server, the same functionality is available to AI assistants through the MCP protocol.
