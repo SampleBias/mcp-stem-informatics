@@ -17,6 +17,7 @@ source "${VENV_DIR}/bin/activate"
 export PYTHONUNBUFFERED=1
 export LOGGING_LEVEL=ERROR
 export PYTHONIOENCODING=utf-8
+export MCP_TRANSPORT=stdio
 
 # Use full path to Python from virtualenv
 PYTHON_BIN="${VENV_DIR}/bin/python"
@@ -37,6 +38,7 @@ echo "Starting MCP Wrapper with Python: ${PYTHON_BIN}" >/tmp/stemformatics-mcp-s
 "${PYTHON_BIN}" -V >>/tmp/stemformatics-mcp-startup.log 2>&1
 echo "Working directory: $(pwd)" >>/tmp/stemformatics-mcp-startup.log
 echo "PATH: $PATH" >>/tmp/stemformatics-mcp-startup.log
+echo "Transport mode: $MCP_TRANSPORT" >>/tmp/stemformatics-mcp-startup.log
 ls -la "${SCRIPT_DIR}"/*.py >>/tmp/stemformatics-mcp-startup.log 2>&1
 
 # Run the wrapper script

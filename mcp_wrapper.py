@@ -32,6 +32,7 @@ logger.info(f"Using Python executable: {PYTHON_EXE}")
 logger.info(f"Working directory: {os.getcwd()}")
 logger.info(f"Script directory: {SCRIPT_DIR}")
 logger.info(f"Server script: {SERVER_SCRIPT}")
+logger.info(f"Transport mode: {os.environ.get('MCP_TRANSPORT', 'not set')}")
 
 def fix_json(data: str) -> str:
     """Fix common JSON formatting issues"""
@@ -134,6 +135,14 @@ def fix_json(data: str) -> str:
 def main():
     logger.info("Starting MCP wrapper")
     
+    # Get environment variables to pass to the child process
+    env = os.environ.copy()
+    
+    # Ensure MCP_TRANSPORT is set to stdio
+    if 'MCP_TRANSPORT' not in env:
+        env['MCP_TRANSPORT'] = 'stdio'
+        logger.info("Explicitly setting MCP_TRANSPORT=stdio")
+    
     # Launch the server_mcp.py script with the specified Python executable
     process = subprocess.Popen(
         [PYTHON_EXE, SERVER_SCRIPT],
@@ -142,7 +151,8 @@ def main():
         stderr=subprocess.PIPE,
         text=True,
         bufsize=1,  # Line buffered
-        cwd=SCRIPT_DIR  # Set working directory to script directory
+        cwd=SCRIPT_DIR,  # Set working directory to script directory
+        env=env  # Pass environment variables
     )
     
     def process_output():
