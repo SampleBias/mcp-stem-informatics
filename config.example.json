@@ -1,0 +1,20 @@
+{
+  "api_server": {
+    "base_url": "https://api.stemformatics.org/v1",
+    "timeout": 30
+  },
+  "auth": {
+    "api_key": "YOUR_API_KEY_HERE",
+    "use_auth": false
+  },
+  "cache": {
+    "enabled": true,
+    "ttl_seconds": 3600,
+    "max_size_mb": 100
+  },
+  "server": {
+    "name": "Stemformatics MCP Server",
+    "description": "MCP server for accessing and analyzing stem cell data",
+    "verbose": true
+  }
+} 
