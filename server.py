@@ -442,8 +442,8 @@ if __name__ == "__main__":
             host = config["server"].get("host", "0.0.0.0")
             port = config["server"].get("port", 8080)
             logger.info(f"Starting server on {host}:{port}")
-            # For network transport mode, we need to use transport_config with network settings
-            mcp.run(transport="sse", sse={"host": host, "port": port})
+            # Use network transport with proper config
+            mcp.run(transport="network", host=host, port=port)
         else:
             # Stdio transport doesn't need additional config
             mcp.run(transport="stdio")
