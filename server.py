@@ -437,16 +437,9 @@ if __name__ == "__main__":
     logger.info(f"Using transport: {transport}")
     
     try:
-        # Start the MCP server with the specified transport
-        if transport == "network":
-            host = config["server"].get("host", "0.0.0.0")
-            port = config["server"].get("port", 8080)
-            logger.info(f"Starting server on {host}:{port}")
-            # Use network transport with proper config
-            mcp.run(transport="network", host=host, port=port)
-        else:
-            # Stdio transport doesn't need additional config
-            mcp.run(transport="stdio")
+        # Let the MCP library handle transport configuration internally
+        # Just specify the transport type without additional parameters
+        mcp.run(transport=transport)
     except Exception as e:
         logger.error(f"Error running MCP server: {e}")
         sys.exit(1) 
